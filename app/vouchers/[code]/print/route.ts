@@ -40,14 +40,14 @@ export async function GET(req: NextRequest, { params }: { params: { code: string
 * { margin: 0; padding: 0; box-sizing: border-box; }
 body { font-family: Georgia, serif; background: #f0ece4; min-height: 100vh; display: flex; flex-direction: column; align-items: center; padding: 32px 16px; color: #2C2C2C; }
 .toolbar { display: flex; gap: 12px; margin-bottom: 28px; justify-content: center; }
-.btn { padding: 11px 28px; border-radius: 8px; font-size: 14px; cursor: pointer; border: none; font-weight: 600; font-family: Arial, sans-serif; }
+.btn { padding: 11px 28px; border-radius: 8px; font-size: 14px; cursor: pointer; border: none; font-weight: 600; }
 .btn-gold { background: linear-gradient(135deg, #C9A84C, #b8891a); color: white; }
 .btn-outline { background: white; color: #5C5552; border: 1px solid #d8d5d3; }
 .voucher { width: 720px; background: white; border-radius: 16px; overflow: hidden; box-shadow: 0 20px 60px rgba(0,0,0,0.12); }
 .gold-strip { height: 4px; background: linear-gradient(90deg, #8B6914, #C9A84C, #e4c06e, #C9A84C, #8B6914); }
 .top-section { padding: 32px 40px 24px; text-align: center; border-bottom: 1px solid #f0ece4; }
 .logo { height: 90px; width: auto; object-fit: contain; }
-.hotel-tagline { font-size: 10px; color: #97928d; letter-spacing: 3px; text-transform: uppercase; margin-top: 8px; font-family: Arial, sans-serif; }
+.hotel-tagline { font-size: 10px; color: #97928d; letter-spacing: 3px; text-transform: uppercase; margin-top: 8px; }
 .image-overlay { position: relative; }
 .package-image { width: 100%; height: 260px; object-fit: cover; display: block; }
 .package-image-placeholder { width: 100%; height: 260px; background: linear-gradient(135deg, #2C2C2C, #3d3836); }
@@ -55,29 +55,29 @@ body { font-family: Georgia, serif; background: #f0ece4; min-height: 100vh; disp
 .image-label-tag { font-size: 9px; font-weight: 600; letter-spacing: 4px; text-transform: uppercase; color: #C9A84C; margin-bottom: 4px; }
 .image-label-title { font-size: 26px; font-weight: 600; color: white; }
 .gifter-band { background: linear-gradient(135deg, #1a1a1a, #2C2C2C); padding: 14px 40px; display: flex; align-items: center; justify-content: space-between; }
-.gifter-text { font-size: 12px; color: rgba(255,255,255,0.6); font-style: italic; font-family: Arial, sans-serif; }
+.gifter-text { font-size: 12px; color: rgba(255,255,255,0.6); font-style: italic; }
 .gifter-name { color: white; font-weight: 600; }
 .code-pill { font-family: monospace; font-size: 13px; font-weight: bold; color: #C9A84C; letter-spacing: 3px; padding: 5px 14px; border: 1px solid rgba(201,168,76,0.35); border-radius: 20px; }
 .body { padding: 32px 40px; }
 .to-section { margin-bottom: 24px; }
-.to-label { font-size: 9px; color: #97928d; letter-spacing: 3px; text-transform: uppercase; margin-bottom: 6px; font-family: Arial, sans-serif; }
+.to-label { font-size: 9px; color: #97928d; letter-spacing: 3px; text-transform: uppercase; margin-bottom: 6px; }
 .to-name { font-size: 22px; color: #2C2C2C; font-weight: 600; }
-.to-email { font-size: 12px; color: #7c7772; margin-top: 2px; font-family: Arial, sans-serif; }
+.to-email { font-size: 12px; color: #7c7772; margin-top: 2px; }
 .dates-row { display: flex; gap: 12px; margin-bottom: 24px; }
 .date-box { flex: 1; background: #fafaf8; border-radius: 10px; padding: 12px 14px; border: 1px solid #edecea; }
-.date-box-label { font-size: 9px; color: #97928d; letter-spacing: 2px; text-transform: uppercase; margin-bottom: 4px; font-family: Arial, sans-serif; }
-.date-box-value { font-size: 13px; color: #2C2C2C; font-weight: 500; font-family: Arial, sans-serif; }
-.includes-title { font-size: 9px; font-weight: 600; color: #C9A84C; letter-spacing: 3px; text-transform: uppercase; margin-bottom: 14px; padding-bottom: 8px; border-bottom: 1px solid rgba(201,168,76,0.2); font-family: Arial, sans-serif; }
+.date-box-label { font-size: 9px; color: #97928d; letter-spacing: 2px; text-transform: uppercase; margin-bottom: 4px; }
+.date-box-value { font-size: 13px; color: #2C2C2C; font-weight: 500; }
+.includes-title { font-size: 9px; font-weight: 600; color: #C9A84C; letter-spacing: 3px; text-transform: uppercase; margin-bottom: 14px; padding-bottom: 8px; border-bottom: 1px solid rgba(201,168,76,0.2); }
 .includes-list { margin-bottom: 24px; }
-.includes-item { display: flex; align-items: flex-start; gap: 10px; padding: 7px 0; border-bottom: 1px solid #f5f3ef; font-size: 13px; color: #3d3836; font-family: Arial, sans-serif; }
+.includes-item { display: flex; align-items: flex-start; gap: 10px; padding: 7px 0; border-bottom: 1px solid #f5f3ef; font-size: 13px; color: #3d3836; }
 .includes-item:last-child { border-bottom: none; }
 .includes-dot { width: 6px; height: 6px; border-radius: 50%; background: #C9A84C; flex-shrink: 0; margin-top: 4px; }
 .valid-box { background: linear-gradient(135deg,#fdf9ed,#fffdf5); border: 1px solid rgba(201,168,76,0.25); border-radius: 12px; padding: 18px 22px; margin-bottom: 24px; }
-.valid-label { font-size: 10px; color: #7c7772; letter-spacing: 2px; text-transform: uppercase; margin-bottom: 6px; font-family: Arial, sans-serif; }
+.valid-label { font-size: 10px; color: #7c7772; letter-spacing: 2px; text-transform: uppercase; margin-bottom: 6px; }
 .valid-date { font-size: 24px; color: #C9A84C; font-weight: 700; }
-.terms { font-size: 10px; color: #bab6b2; line-height: 1.7; padding-top: 16px; border-top: 1px solid #edecea; font-family: Arial, sans-serif; }
+.terms { font-size: 10px; color: #bab6b2; line-height: 1.7; padding-top: 16px; border-top: 1px solid #edecea; }
 .footer { background: #fafaf8; border-top: 1px solid #edecea; padding: 16px 40px; display: flex; justify-content: space-between; align-items: center; }
-.footer-contact { font-size: 10px; color: #97928d; line-height: 1.7; font-family: Arial, sans-serif; }
+.footer-contact { font-size: 10px; color: #97928d; line-height: 1.7; }
 .footer-brand { font-size: 11px; color: #C9A84C; letter-spacing: 2px; }
 @media print { .toolbar { display: none !important; } body { background: white; padding: 0; } .voucher { box-shadow: none; border-radius: 0; width: 100%; } }
 @page { size: A4 portrait; margin: 1.2cm; }
@@ -85,7 +85,7 @@ body { font-family: Georgia, serif; background: #f0ece4; min-height: 100vh; disp
 </head>
 <body>
 <div class="toolbar">
-  <button class="btn btn-gold" onclick="window.print()">Printo / Shkarko PDF</button>
+  <button class="btn btn-gold" onclick="window.print()">Printo / PDF</button>
   <button class="btn btn-outline" onclick="window.close()">Mbyll</button>
 </div>
 <div class="voucher">
