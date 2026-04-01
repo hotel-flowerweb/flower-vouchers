@@ -1,0 +1,171 @@
+'use client';
+
+import { useState } from 'react';
+import Link from 'next/link';
+import { format } from 'date-fns';
+
+interface Voucher {
+  id: string;
+  code: string;
+  customer_name: string;
+  customer_email: string;
+  gifter_name?: string;
+  package_name: string;
+  amount: number;
+  currency: string;
+  checkin_date?: string;
+  checkout_date?: string;
+  expires_at: string;
+  status: string;
+  is_paid?: boolean;
+  notes?: string;
+}
+
+interface Props {
+  vouchers: Voucher[];
+  searchQuery: string;
+  userEmail: string;
+}
+
+export default function DashboardTable({ vouchers: initial, searchQuery, userEmail }: Props) {
+  const [vouchers, setVouchers] = useState(initial);
+
+  const updateStatus = async (code: string, newStatus: string) => {
+    const res = await fetch(`/api/vouchers/${code}/status`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ status: newStatus }),
+    });
+    if (res.ok) {
+      setVouchers(vs => vs.map(v => v.code === code ? { ...v, status: newStatus } : v));
+    }
+  };
+
+  const updatePaid = async (code: string, isPaid: boolean) => {
+    const res = await fetch(`/api/vouchers/${code}/pay`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ is_paid: isPaid }),
+    });
+    if (res.ok) {
+      setVouchers(vs => vs.map(v => v.code === code ? { ...v, is_paid: isPaid } : v));
+    }
+  };
+
+  const statusColors: Record<string, string> = {
+    active: 'text-emerald-700 bg-emerald-50 border-emerald-200',
+    redeemed: 'text-blue-700 bg-blue-50 border-blue-200',
+    cancelled: 'text-charcoal-500 bg-charcoal-100 border-charcoal-200',
+    expired: 'text-red-600 bg-red-50 border-red-200',
+  };
+
+  return (
+    <div className="card overflow-hidden">
+      <div className="px-6 py-4 border-b border-charcoal-100 flex items-center justify-between">
+        <h2 className="font-semibold text-charcoal-800">
+          {searchQuery ? `Rezultate për "${searchQuery}"` : 'Gift Cards'}
+        </h2>
+        <span className="text-charcoal-400 text-sm">{vouchers.length} gjetur</span>
+      </div>
+
+      {vouchers.length > 0 ? (
+        <div className="overflow-x-auto">
+          <table className="w-full text-sm">
+            <thead>
+              <tr className="bg-charcoal-50 border-b border-charcoal-100">
+                <th className="px-4 py-3 text-left text-xs font-semibold text-charcoal-500 uppercase tracking-wider">Kodi</th>
+                <th className="px-4 py-3 text-left text-xs font-semibold text-charcoal-500 uppercase tracking-wider">Marrësi</th>
+                <th className="px-4 py-3 text-left text-xs font-semibold text-charcoal-500 uppercase tracking-wider hidden md:table-cell">Paketa</th>
+                <th className="px-4 py-3 text-right text-xs font-semibold text-charcoal-500 uppercase tracking-wider">Shuma</th>
+                <th className="px-4 py-3 text-left text-xs font-semibold text-charcoal-500 uppercase tracking-wider hidden xl:table-cell">Check-in</th>
+                <th className="px-4 py-3 text-left text-xs font-semibold text-charcoal-500 uppercase tracking-wider hidden xl:table-cell">Check-out</th>
+                <th className="px-4 py-3 text-left text-xs font-semibold text-charcoal-500 uppercase tracking-wider hidden lg:table-cell">Valid deri</th>
+                <th className="px-4 py-3 text-left text-xs font-semibold text-charcoal-500 uppercase tracking-wider">Status</th>
+                <th className="px-4 py-3 text-left text-xs font-semibold text-charcoal-500 uppercase tracking-wider">Pagesa</th>
+                <th className="px-4 py-3 text-left text-xs font-semibold text-charcoal-500 uppercase tracking-wider hidden xl:table-cell">Notes</th>
+                <th className="px-4 py-3" />
+              </tr>
+            </thead>
+            <tbody className="divide-y divide-charcoal-100">
+              {vouchers.map((v) => (
+                <tr key={v.id} className="hover:bg-charcoal-50/50 transition-colors">
+                  <td className="px-4 py-3">
+                    <span className="font-mono text-gold-600 font-semibold text-xs tracking-wider">{v.code}</span>
+                  </td>
+                  <td className="px-4 py-3">
+                    <div className="font-medium text-charcoal-800 text-xs">{v.customer_name}</div>
+                    <div className="text-charcoal-400 text-xs">{v.customer_email}</div>
+                    {v.gifter_name && <div className="text-charcoal-400 text-xs italic">nga: {v.gifter_name}</div>}
+                  </td>
+                  <td className="px-4 py-3 hidden md:table-cell text-charcoal-600 text-xs">{v.package_name}</td>
+                  <td className="px-4 py-3 text-right">
+                    <span className="font-semibold text-charcoal-900 text-xs">{v.currency} {Number(v.amount).toFixed(2)}</span>
+                  </td>
+                  <td className="px-4 py-3 hidden xl:table-cell text-charcoal-500 text-xs">
+                    {v.checkin_date ? format(new Date(v.checkin_date), 'dd MMM yyyy') : '—'}
+                  </td>
+                  <td className="px-4 py-3 hidden xl:table-cell text-charcoal-500 text-xs">
+                    {v.checkout_date ? format(new Date(v.checkout_date), 'dd MMM yyyy') : '—'}
+                  </td>
+                  <td className="px-4 py-3 hidden lg:table-cell">
+                    <span className="text-xs font-semibold text-gold-600">
+                      {format(new Date(v.expires_at), 'dd MMM yyyy')}
+                    </span>
+                  </td>
+                  <td className="px-4 py-3">
+                    <select
+                      value={v.status}
+                      onChange={e => updateStatus(v.code, e.target.value)}
+                      className={`text-xs font-semibold px-2 py-1 rounded-lg border cursor-pointer focus:outline-none ${statusColors[v.status] || statusColors.active}`}
+                    >
+                      <option value="active">Active</option>
+                      <option value="redeemed">Redeemed</option>
+                      <option value="cancelled">Cancelled</option>
+                    </select>
+                  </td>
+                  <td className="px-4 py-3">
+                    <select
+                      value={v.is_paid ? 'paid' : 'unpaid'}
+                      onChange={e => updatePaid(v.code, e.target.value === 'paid')}
+                      className={`text-xs font-semibold px-2 py-1 rounded-lg border cursor-pointer focus:outline-none ${
+                        v.is_paid
+                          ? 'bg-emerald-50 text-emerald-700 border-emerald-200'
+                          : 'bg-orange-50 text-orange-700 border-orange-200'
+                      }`}
+                    >
+                      <option value="unpaid">Jo e Paguar</option>
+                      <option value="paid">✓ E Paguar</option>
+                    </select>
+                  </td>
+                  <td className="px-4 py-3 hidden xl:table-cell">
+                    {v.notes ? (
+                      <span className="text-xs text-charcoal-500 italic" title={v.notes}>
+                        {v.notes.length > 25 ? v.notes.substring(0, 25) + '...' : v.notes}
+                      </span>
+                    ) : <span className="text-charcoal-300 text-xs">—</span>}
+                  </td>
+                  <td className="px-4 py-3">
+                    <Link href={`/vouchers/${v.code}`}
+                      className="text-gold-600 hover:text-gold-700 font-medium text-xs uppercase tracking-wider transition-colors">
+                      Shiko →
+                    </Link>
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+      ) : (
+        <div className="text-center py-16 text-charcoal-400">
+          <div className="text-4xl mb-3">◇</div>
+          <p className="font-medium">{searchQuery ? 'Nuk u gjet asnjë gift card' : 'Nuk ka gift card ende'}</p>
+          {!searchQuery && (
+            <Link href="/vouchers/new" className="text-gold-600 text-sm mt-2 inline-block hover:underline">
+              Krijo të parën →
+            </Link>
+          )}
+        </div>
+      )}
+    </div>
+  );
+}
