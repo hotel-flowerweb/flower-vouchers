@@ -26,14 +26,15 @@ export default async function DashboardPage({ searchParams }: { searchParams: { 
     );
   }
 
-  const { data: vouchers = [] } = await vouchersQuery;
-  const { data: allVouchers = [] } = await supabase.from('vouchers').select('status, redeemed_at');
+  const { data: vouchers } = await vouchersQuery;
+  const { data: allVouchersData } = await supabase.from('vouchers').select('status, redeemed_at');
+  const allVouchers = allVouchersData || [];
 
   const stats = {
     total: allVouchers.length,
-    active: allVouchers.filter(v => v.status === 'active').length,
-    redeemedToday: allVouchers.filter(v => v.redeemed_at && isToday(new Date(v.redeemed_at))).length,
-    expired: allVouchers.filter(v => v.status === 'expired').length,
+    active: allVouchers.filter((v: any) => v.status === 'active').length,
+    redeemedToday: allVouchers.filter((v: any) => v.redeemed_at && isToday(new Date(v.redeemed_at))).length,
+    expired: allVouchers.filter((v: any) => v.status === 'expired').length,
   };
 
   return (
@@ -66,7 +67,7 @@ export default async function DashboardPage({ searchParams }: { searchParams: { 
           </div>
           <div className="card p-6">
             <div className="text-3xl font-display font-bold text-blue-600">{stats.redeemedToday}</div>
-            <div className="text-charcoal-500 text-sm mt-1">Të përdorura sot</div>
+            <div className="text-charcoal-500 text-sm mt-1">Te perdorura sot</div>
             <div className="gold-line mt-3" />
           </div>
           <div className="card p-6">
